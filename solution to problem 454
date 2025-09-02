@@ -1,0 +1,72 @@
+#include <stdlib.h>
+
+#define HASH_SIZE 100003 
+
+typedef struct Node {
+    int key;
+    int value;
+    struct Node* next;
+} Node;
+
+Node* hashTable[HASH_SIZE];
+unsigned int hash(int key) {
+    return ((unsigned int)key % HASH_SIZE + HASH_SIZE) % HASH_SIZE;
+}
+void insert(int key, int value) {
+    unsigned int idx = hash(key);
+    Node* curr = hashTable[idx];
+    while (curr) {
+        if (curr->key == key) {
+            curr->value += value;
+            return;
+        }
+        curr = curr->next;
+    }
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->key = key;
+    newNode->value = value;
+    newNode->next = hashTable[idx];
+    hashTable[idx] = newNode;
+}
+
+int find(int key) {
+    unsigned int idx = hash(key);
+    Node* curr = hashTable[idx];
+    while (curr) {
+        if (curr->key == key) return curr->value;
+        curr = curr->next;
+    }
+    return 0;
+}
+void freeHash() {
+    for (int i = 0; i < HASH_SIZE; i++) {
+        Node* curr = hashTable[i];
+        while (curr) {
+            Node* temp = curr;
+            curr = curr->next;
+            free(temp);
+        }
+        hashTable[i] = NULL;
+    }
+}
+
+int fourSumCount(int* nums1, int nums1Size,
+                 int* nums2, int nums2Size,
+                 int* nums3, int nums3Size,
+                 int* nums4, int nums4Size) {
+    freeHash();  
+    for (int i = 0; i < nums1Size; i++) {
+        for (int j = 0; j < nums2Size; j++) {
+            insert(nums1[i] + nums2[j], 1);
+        }
+    }
+    int count = 0;
+    for (int k = 0; k < nums3Size; k++) {
+        for (int l = 0; l < nums4Size; l++) {
+            int target = -(nums3[k] + nums4[l]);
+            count += find(target);
+        }
+    }
+    
+    return count;
+}
