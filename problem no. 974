@@ -1,0 +1,16 @@
+int subarraysDivByK(int* nums, int numsSize, int k) {
+    int modFreq[k];
+    for (int i = 0; i < k; i++) modFreq[i] = 0;
+
+    modFreq[0] = 1;
+
+    int sum = 0, count = 0;
+    for (int i = 0; i< numsSize; i++){
+        sum += nums[i];
+        int mod = ((sum % k) + k) % k;
+
+        count += modFreq[mod];
+        modFreq[mod]++;
+    }
+    return count;    
+}
