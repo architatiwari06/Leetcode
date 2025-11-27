@@ -1,0 +1,8 @@
+class Solution:
+    def strStr(self, haystack: str, needle: str) -> int:
+        if needle in haystack:
+            haystack = haystack.replace(needle, '*')
+            return haystack.index('*')
+        else:
+              return -1
+                
