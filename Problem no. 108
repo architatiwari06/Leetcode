@@ -1,0 +1,28 @@
+class Solution {
+public:
+
+    TreeNode* sortedArrayToBST(vector<int>& nums) {
+        return buildTree(nums, 0, nums.size() - 1);
+    }
+
+    TreeNode* buildTree(vector<int>& nums, int left, int right) {
+
+        if (left > right) {
+            return NULL;
+        }
+
+        // Find Middle element
+        int mid = left + (right - left) / 2;
+
+        // Middle becomes root
+        TreeNode* root = new TreeNode(nums[mid]);
+
+        // Build left subtree
+        root->left = buildTree(nums, left, mid - 1);
+
+        // Build right subtree
+        root->right = buildTree(nums, mid + 1, right);
+
+        return root;
+    }
+};
