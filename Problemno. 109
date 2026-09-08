@@ -1,0 +1,42 @@
+class Solution {
+public:
+
+    TreeNode* sortedListToBST(ListNode* head) {
+
+        // Empty list
+        if (head == NULL) {
+            return NULL;
+        }
+
+        // Only one node
+        if (head->next == NULL) {
+            return new TreeNode(head->val);
+        }
+
+        // Slow and Fast pointers
+        ListNode* slow = head;
+        ListNode* fast = head;
+        ListNode* prev = NULL;
+
+        // Find middle node
+        while (fast != NULL && fast->next != NULL) {
+            prev = slow;
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+
+        // Break the list into two halves
+        prev->next = NULL;
+
+        // Middle becomes root
+        TreeNode* root = new TreeNode(slow->val);
+
+        // Left half
+        root->left = sortedListToBST(head);
+
+        // Right half
+        root->right = sortedListToBST(slow->next);
+
+        return root;
+    }
+};
