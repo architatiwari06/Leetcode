@@ -1,0 +1,46 @@
+class Solution {
+public:
+    long long total = 0;
+    long long maxProductValue = 0;
+    TreeNode* originalRoot;
+
+    long long findSum(TreeNode* root) {
+        if (root == nullptr) {
+            return 0;
+        }
+
+        return root->val
+             + findSum(root->left)
+             + findSum(root->right);
+    }
+
+    long long dfs(TreeNode* root) {
+        if (root == nullptr) {
+            return 0;
+        }
+
+        long long leftSum = dfs(root->left);
+        long long rightSum = dfs(root->right);
+
+        long long subtreeSum =
+            root->val + leftSum + rightSum;
+
+        if (root != originalRoot) {
+            long long product =
+                subtreeSum * (total - subtreeSum);
+
+            maxProductValue = max(maxProductValue, product);
+        }
+
+        return subtreeSum;
+    }
+
+    int maxProduct(TreeNode* root) {
+        originalRoot = root;
+        total = findSum(root);
+
+        dfs(root);
+
+        return maxProductValue % 1000000007;
+    }
+};
